@@ -1,0 +1,11 @@
+.outer-box {
+    background-color: black;
+    color: white;
+    padding: 8px 0px 8px 16px;
+}
+
+.outer-box a {
+    margin-right: 15px;
+    color: white;
+    text-decoration: none;
+}

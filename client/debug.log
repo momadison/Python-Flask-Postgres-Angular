@@ -1,0 +1,6 @@
+[1226/181629.648:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1226/181740.681:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\matto\AppData\Local\Temp\scoped_dir31712_1871920316\Crashpad\attachments\f971f704-c331-41c2-84be-090f6a50184e: The system cannot find the path specified. (0x3)
+[1226/181740.866:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[1226/181740.866:ERROR:exception_snapshot_win.cc(99)] thread ID 31632 not found in process
+[1226/182730.485:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\matto\AppData\Local\Temp\karma-99714084\Crashpad\attachments\4ee24e5f-74e0-4929-ae1e-de70943ed03b: The system cannot find the path specified. (0x3)
+[1226/182951.517:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\matto\AppData\Local\Temp\karma-49535651\Crashpad\attachments\1c29aefc-7b91-4ef0-bf58-15f40bbd7007: The system cannot find the path specified. (0x3)

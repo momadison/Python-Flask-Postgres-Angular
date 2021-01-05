@@ -1,0 +1,28 @@
+#Get base app
+FROM python:3.7-buster
+
+#Set a working directory
+WORKDIR '/usr/src/app'
+
+#Prevents Python from writing pyc files to disc
+ENV PYTHONDONTWRITEBYTECODE 1
+#Prevents Python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED 1
+
+# Install Netcat
+RUN apt-get update && apt-get install -y netcat
+
+#Update PIP
+RUN pip install --upgrade pip
+
+#install all dependencies
+COPY ./requirements.txt /usr/src/app/requirements.txt
+RUN pip install -r requirements.txt
+
+COPY . /usr/src/app
+
+#Run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+#Run start command
+# CMD ["python","api.py", "--host=0.0.0.0"]

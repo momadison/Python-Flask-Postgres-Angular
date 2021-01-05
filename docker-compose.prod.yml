@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:80
+    depends_on:
+      - api
+      - client
+    restart: always
+  api:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    command: gunicorn --bind 0.0.0.0:5000 manage:app
+    expose:
+      - 5000
+    env_file:
+      - ./server/.env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./server/.env.prod.db
+  client:
+    #allow angular to update automatically on windows
+    environment: 
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    #file mapping
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+
+volumes:
+  postgres_data:
