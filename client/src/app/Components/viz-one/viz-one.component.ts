@@ -21,7 +21,7 @@ export class VizOneComponent implements OnInit {
       console.log(response)
     })
 
-    axios.post('http://localhost:5000/values', {email: "anotheremail@gmail.com"})
+    axios.post('http://localhost:5000/values', {name: "Kelly", email: "anotheremail@gmail.com", hometown: "portland", rank: 5})
     //prod environment
     // axios.post('/api/values', {email: "anotheremail@gmail.com"})
     .then((response) => {
