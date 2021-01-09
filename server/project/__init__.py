@@ -25,6 +25,8 @@ from schema import User
 engine=create_engine(os.getenv('DATABASE_URL'))
 conn=engine.connect()
 session=Session(bind=engine)
+#create tables
+Base.metadata.create_all(conn)
 
 @app.route('/values', methods=['GET', 'POST'])
 def get_or_post():
@@ -44,8 +46,6 @@ def get_or_post():
                 "rank": surfer.rank
             }
             data_list.append(temp)
-
-        print("data is: ", data_list)
         #read data with sqlalchemy
         return {"data": data_list}
         
@@ -63,9 +63,6 @@ def get_or_post():
         #create specific instances of classes
         surfer = Surfer(name=data['name'], email=data['email'], hometown=data['hometown'], rank=data['rank'])
         board = Board(surfer_id=1, board_name='shredder', color='Blue', length=68)
-
-        #create tables
-        Base.metadata.create_all(conn)
 
         #add specific instances
         session.add(surfer)
