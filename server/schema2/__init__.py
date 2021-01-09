@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float
-
+#add base
 Base = declarative_base()
 
 class Surfer(Base):
