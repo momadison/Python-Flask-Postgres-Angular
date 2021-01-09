@@ -4,9 +4,7 @@ __pycache__/
 *$py.class
 
 # environment filesystem
-.env.dev
-.env.prod  
-.env.prod.db
+
 
 # C extensions
 *.so
@@ -108,7 +106,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
