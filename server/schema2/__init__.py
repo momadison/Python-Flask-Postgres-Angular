@@ -12,6 +12,15 @@ class Surfer(Base):
     wipeouts = Column(Integer)
     rank = Column(Integer)
 
+    def serialize(self):
+            return {
+            'name': self.name, 
+            'email': self.email,
+            'hometown': self.hometown,
+            "wipeouts": self.wipeouts,
+            "rank": self.rank
+        }
+
 class Board(Base):
     __tablename__ = 'surfboards'
     id = Column(Integer, primary_key=True)

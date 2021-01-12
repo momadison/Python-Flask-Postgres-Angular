@@ -1,13 +1,15 @@
 import pandas as pd
-from flask import Flask, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+import json
 
+import numpy as np
 import ast
 import os
-
+import routes
 from schema2 import Surfer, Board, Base
 
 # Initialize Flask
@@ -24,18 +26,37 @@ from schema import User
 
 engine=create_engine(os.getenv('DATABASE_URL'))
 conn=engine.connect()
-session=Session(bind=engine)
+
 #create tables
 Base.metadata.create_all(conn)
 
+import routes
+
+#Week 10 Routes
+app.add_url_rule('/05/', view_func=routes.index)
+app.add_url_rule('/05/contact', view_func=routes.contact)
+app.add_url_rule('/07/api/v1.0/justice-league', view_func=routes.justice_league)
+app.add_url_rule('/07/', view_func=routes.welcome)
+app.add_url_rule('/09/api/v1.0/justice-league/real_name/<real_name>', view_func=routes.justice_league_by_real_name)
+app.add_url_rule('/09/api/v1.0/justice-league/superhero/<superhero>', view_func=routes.justice_league_by_superhero_name)
+
+# Route with DB
 @app.route('/values', methods=['GET', 'POST'])
 def get_or_post():
+    session=Session(bind=engine)
     if request.method == 'GET':
         #read data with pandas
         # data = pd.read_sql("SELECT * FROM users", conn)
         # return {"data": data.to_json(orient="records")}
         data = session.query(Surfer)
         data_list = []
+
+        #from type class list to json
+        data_list2 = []
+        print("type class list: ", type(data_list2))
+        
+        data_list2 = [e.serialize() for e in data]
+        print("type: ", type(data_list2))
 
         for surfer in data:
             temp = {
@@ -47,7 +68,11 @@ def get_or_post():
             }
             data_list.append(temp)
         #read data with sqlalchemy
-        return {"data": data_list}
+        session.close()
+        print(type(data_list2))
+        print(jsonify(data_list2))
+        
+        return {"data": data_list2}
         
     if request.method == 'POST':
         # decode from bytes object to dictionary
@@ -68,4 +93,5 @@ def get_or_post():
         session.add(surfer)
         session.add(board)
         session.commit()
+        session.close()
         return {"msg": "user added successfully"}
