@@ -56,17 +56,6 @@ def justice_league_by_real_name(real_name):
 
     return jsonify({"error": f"Character with real_name {real_name} not found."}), 404
 
-
-    canonicalized = real_name.replace(" ", "").lower()
-    for character in justice_league_members:
-        search_term = character["real_name"].replace(" ", "").lower()
-
-        if search_term == canonicalized:
-            return jsonify(character)
-
-    return jsonify({"error": f"Character with real_name {real_name} not found."}), 404
-
-
 # @app.route("/api/v1.0/justice-league/superhero/<superhero>")
 def justice_league_by_superhero_name(superhero):
     """Fetch the Justice League character whose superhero matches
