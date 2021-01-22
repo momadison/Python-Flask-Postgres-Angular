@@ -27,5 +27,7 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
+RUN ng add @angular/material
+
 #Run start command
 CMD ["ng","serve", "--host","0.0.0.0","--disable-host-check"]

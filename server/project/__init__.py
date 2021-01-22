@@ -48,30 +48,25 @@ def get_or_post():
         #read data with pandas
         # data = pd.read_sql("SELECT * FROM users", conn)
         # return {"data": data.to_json(orient="records")}
-        data = session.query(Surfer)
+        data = session.query(Surfer).all()
         data_list = []
 
         #from type class list to json
-        data_list2 = []
-        print("type class list: ", type(data_list2))
+        # data_list2 = list(np.ravel(data))
         
         data_list2 = [e.serialize() for e in data]
-        print("type: ", type(data_list2))
 
         for surfer in data:
             temp = {
                 "name": surfer.name,
                 "email": surfer.email,
                 "hometown": surfer.hometown,
-                "wipeouts": surfer.wipeouts,
-                "rank": surfer.rank
+                "rank": surfer.rank,
+                "wipeouts": surfer.wipeouts
             }
             data_list.append(temp)
         #read data with sqlalchemy
         session.close()
-        print(type(data_list2))
-        print(jsonify(data_list2))
-        
         return {"data": data_list2}
         
     if request.method == 'POST':
@@ -86,7 +81,7 @@ def get_or_post():
 
         #add to the database with sqlalchemy
         #create specific instances of classes
-        surfer = Surfer(name=data['name'], email=data['email'], hometown=data['hometown'], rank=data['rank'])
+        surfer = Surfer(name=data['name'], email=data['email'], hometown=data['hometown'], rank=data['rank'], wipeouts=data['wipeouts'])
         board = Board(surfer_id=1, board_name='shredder', color='Blue', length=68)
 
         #add specific instances

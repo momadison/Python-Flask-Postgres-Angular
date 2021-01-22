@@ -17,8 +17,8 @@ class Surfer(Base):
             'name': self.name, 
             'email': self.email,
             'hometown': self.hometown,
-            "wipeouts": self.wipeouts,
-            "rank": self.rank
+            "rank": self.rank,
+            "wipeouts": self.wipeouts
         }
 
 class Board(Base):

@@ -1,1 +1,72 @@
-<p>viz-one works!</p>
+<div class="page-container">
+    <div class="form-group">
+        <div class="form-row">
+            <div class="form-column">
+                <div class="label" >Name</div>
+                <input type="text" [formControl]="name" id="name" size='10'  />
+            </div>
+            <div class="form-column">
+                <div class="label" >Email</div>
+                <input type="text" [formControl]="email" id="email" size='10' />
+            </div>
+            <div class="form-column">
+                <div class="label" >Hometown</div>
+                <input type="text" [formControl]="hometown" id="hometown" size='10'/>
+            </div>
+            <div class="form-column">
+                <div class="label">Rank</div>
+                <input type="text" [formControl]="rank" id="rank" size='10' />
+            </div>
+            <div class="form-column">
+                <div class="label">Wipeouts</div>
+                <input type="text" [formControl]="wipeouts" id="wipeouts" size='10'/>
+            </div>
+            <div class="form-column">
+                <input type="submit" (click)='submit()' id="submit" value='Submit'>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="data title">
+                SURFERS LIST
+            </div>
+        </div>
+        <div class="row">
+            <div class="data header name">
+                Name
+            </div>
+            <div class="data header email">
+                Email
+            </div>
+            <div class="data header hometown">
+                Hometown
+            </div>
+            <div class="data header rank">
+                Rank
+            </div>
+            <div class="data header wipeouts">
+                Wipeouts
+            </div>
+        </div>
+        <div *ngFor="let surfer of data;" class="row">
+            <div class="data header name">
+                {{surfer.name}}
+            </div>
+            <div class="data header email">
+                {{surfer.email}}
+            </div>
+            <div class="data header hometown">
+                {{surfer.hometown}}
+            </div>
+            <div class="data header rank">
+                {{surfer.rank}}
+            </div>
+            <div class="data header wipeouts">
+                {{surfer.wipeouts}}
+            </div>
+        </div>
+    </div>
+</div>

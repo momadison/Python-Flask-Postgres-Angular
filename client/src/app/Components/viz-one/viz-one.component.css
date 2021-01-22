@@ -1,0 +1,64 @@
+.page-container {
+    display: flex;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px 0px 10px;
+}
+
+.form-row {
+    display: flex;
+    margin: 5px 0px 0px 0px;
+    flex-direction: column;
+}
+
+.form-column {
+    margin-right: 10px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.label {
+    font-size: 10px;
+    margin: 0px 5px 0px 0px;
+}
+
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    margin: 10px 0px 0px 10px;
+}
+
+.row {
+    display: flex;
+    align-items: left;
+    width: 350px;
+    margin: 0px 0px 1px 0px;
+}
+
+.data {
+    text-align:center;
+    border: 1px solid black;
+    width: 100%;
+    text-align: center;
+    margin: 0px 1px 0px 1px;
+    font-size: 10px;
+    overflow-wrap: break-word;
+}
+
+.title {
+    width: 100%;
+    font-weight: bold;
+}
+
+.name {width: 15%;}
+.email {width: 40%}
+.hometown {width: 20%}
+.rank {width: 10%}
+.wipeouts {width: 15%}
+
