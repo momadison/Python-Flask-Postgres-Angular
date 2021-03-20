@@ -1,29 +1,26 @@
-import pandas as pd
-from flask import Flask, jsonify, request, Response
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-import json
+# import pandas as pd
+# from flask import Flask, jsonify, request, Response
+# from flask_cors import CORS
+# from flask_sqlalchemy import SQLAlchemy
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import Session
+# import json
 
-import numpy as np
-import ast
-import os
-import routes
-from schema import Surfer, Board, Base, Operator
-# bitch
-from scrape import scrape_op_info, scrape_for_op_leases
-scrape_for_op_leases()
-# scrape_op_info()
-# Initialize Flask
-app = Flask(__name__)
-CORS(app)
-# pull in the config on init
-app.config.from_object('project.init-config.Config')
-# create new SQLAlchemy instance
+# import numpy as np
+# import ast
+# import os
+# import routes
+# from schema2 import Surfer, Board, Base
+
+# # Initialize Flask
+# app = Flask(__name__)
+# CORS(app)
+# # pull in the config on init
+# app.config.from_object('project.init-config.Config')
+# # create new SQLAlchemy instance
 # db = SQLAlchemy(app)
-# import schema tables.  Must come after db is established as it is
-# dependent on db
+# # import schema tables.  Must come after db is established as it is
+# # dependent on db
 # from schema3 import User
 
 
@@ -34,6 +31,7 @@ app.config.from_object('project.init-config.Config')
 # Base.metadata.create_all(conn)
 
 # import routes
+
 # #Week 10 Routes
 # app.add_url_rule('/05/', view_func=routes.index)
 # app.add_url_rule('/05/contact', view_func=routes.contact)
@@ -42,7 +40,7 @@ app.config.from_object('project.init-config.Config')
 # app.add_url_rule('/09/api/v1.0/justice-league/real_name/<real_name>', view_func=routes.justice_league_by_real_name)
 # app.add_url_rule('/09/api/v1.0/justice-league/superhero/<superhero>', view_func=routes.justice_league_by_superhero_name)
 
-# Route with DB
+# # Route with DB
 # @app.route('/values', methods=['GET', 'POST'])
 # def get_or_post():
 #     session=Session(bind=engine)
@@ -76,19 +74,19 @@ app.config.from_object('project.init-config.Config')
 #         data = ast.literal_eval(request.data.decode('utf-8'))
         
 #         #add to the database with flask-sqlalchemy
-#         # db.session.add(User(email=data['email']))
-#         # db.session.commit()
-#         # return {"msg": "user added successfully"}
-
+#         db.session.add(User(email=data['email']))
+#         db.session.commit()
+#         return {"msg": "user added successfully"}
+#         db.session.close()
 
 #         #add to the database with sqlalchemy
 #         #create specific instances of classes
-#         surfer = Surfer(name=data['name'], email=data['email'], hometown=data['hometown'], rank=data['rank'], wipeouts=data['wipeouts'])
-#         board = Board(surfer_id=1, board_name='shredder', color='Blue', length=68)
+#         # surfer = Surfer(name=data['name'], email=data['email'], hometown=data['hometown'], rank=data['rank'], wipeouts=data['wipeouts'])
+#         # board = Board(surfer_id=1, board_name='shredder', color='Blue', length=68)
 
 #         #add specific instances
-#         session.add(surfer)
-#         session.add(board)
-#         session.commit()
-#         session.close()
-#         return {"msg": "user added successfully"}
+#         # session.add(surfer)
+#         # session.add(board)
+#         # session.commit()
+#         # session.close()
+#         # return {"msg": "user added successfully"}

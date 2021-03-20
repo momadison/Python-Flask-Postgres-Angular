@@ -8,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
 
   constructor() { }
-
+  confetti:boolean = false;
   ngOnInit(): void {
+    setTimeout(()=> {
+      this.confetti = true;
+    }, 2000)
   }
 
 }

@@ -12,6 +12,9 @@ services:
       - 5000:5000
     env_file:
       - ./server/.env.dev
+    environment:
+      - SS_AUTH-ID=7f6d7e2c-f659-a7dd-eb3d-fc3e772a3c80
+      - SS_AUTH-TOKEN=ge4NcF15QJYEKSLlcCTM
     depends_on:
       - db
     restart: always
@@ -34,7 +37,7 @@ services:
       - /app/node_modules
       - ./client:/app
     ports:
-     - 3000:4200
+     - 4200:4200
 
 volumes:
   postgres_data:

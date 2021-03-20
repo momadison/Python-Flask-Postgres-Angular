@@ -1,3 +1,9 @@
-<app-viz-one></app-viz-one>
+<!-- <app-viz-one></app-viz-one>
 <br><br>
-<app-viz-two></app-viz-two>
+<app-viz-two></app-viz-two> -->
+<div class="container">
+    <div *ngIf="confetti">
+    <app-confetti></app-confetti>
+    </div>
+<app-viz-one></app-viz-one>
+</div>

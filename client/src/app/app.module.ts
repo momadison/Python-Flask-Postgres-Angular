@@ -7,6 +7,7 @@ import { VizOneComponent } from './Components/viz-one/viz-one.component';
 import { VizTwoComponent } from './Components/viz-two/viz-two.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { NavbarComponent } from './Components/navbar/navbar.component';
+import { ConfettiComponent } from './Components/confetti/confetti.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { NavbarComponent } from './Components/navbar/navbar.component';
     VizOneComponent,
     VizTwoComponent,
     DashboardComponent,
-    NavbarComponent
+    NavbarComponent,
+    ConfettiComponent
   ],
   imports: [
     BrowserModule,

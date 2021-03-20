@@ -1,8 +1,13 @@
-Flask==1.1.1
-flask_restful
+beautifulsoup4==4.9.1
 flask_cors
-psycopg2-binary==2.8.4
+flask_restful
+Flask==1.1.1
 Flask-Migrate
 Flask-SQLAlchemy==2.4.1
 gunicorn==20.0.4
 pandas
+psycopg2-binary==2.8.4
+requests
+selenium==3.141.0
+tabulate==0.8.9
+usaddress
