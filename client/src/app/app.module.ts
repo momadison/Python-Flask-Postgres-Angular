@@ -8,6 +8,10 @@ import { VizTwoComponent } from './Components/viz-two/viz-two.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { NavbarComponent } from './Components/navbar/navbar.component';
 import { ConfettiComponent } from './Components/confetti/confetti.component';
+import { AnimationSandboxComponent } from './Components/animation-sandbox/animation-sandbox.component';
+import { OperatorTreeComponent } from './Components/operator-tree/operator-tree.component';
+import { ProductionTableComponent } from './Components/production-table/production-table.component';
+import { LineGraphComponent } from './Components/line-graph/line-graph.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +20,11 @@ import { ConfettiComponent } from './Components/confetti/confetti.component';
     VizTwoComponent,
     DashboardComponent,
     NavbarComponent,
-    ConfettiComponent
+    ConfettiComponent,
+    AnimationSandboxComponent,
+    OperatorTreeComponent,
+    ProductionTableComponent,
+    LineGraphComponent
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,8 @@ import numpy as np
 import ast
 import os
 import routes
-from schema import Surfer, Board, Base, Operator
+from schema import Surfer, Board, Base, Operator, Lease, Production
+from scrape import scrape_op_info, scrape_for_op_leases, getFieldAndProduction
 
 # scrape_op_info()
 # Initialize Flask
@@ -40,20 +41,84 @@ app.add_url_rule('/07/', view_func=routes.welcome)
 app.add_url_rule('/09/api/v1.0/justice-league/real_name/<real_name>', view_func=routes.justice_league_by_real_name)
 app.add_url_rule('/09/api/v1.0/justice-league/superhero/<superhero>', view_func=routes.justice_league_by_superhero_name)
 
-#Route with DB
+#3
+@app.route('/operator', methods=['GET','POST'])
+def getOperator():
+    if request.method == 'POST':
+        session=Session(bind=engine)
+        data = ast.literal_eval(request.data.decode('utf-8'))
+        operatorData = session.query(Operator).all()
+        operatorData = [e.serialize() for e in operatorData]
+        individualOperator = [x for x in operatorData if x['operatorId'] == data['id']]
+        session.close()
+        if (len(individualOperator) > 0 ):
+            print("found in DB")
+            return json.dumps(individualOperator)
+        else: 
+            print("not in DB, searching the web for data")
+            scrape_op_info(data['id'])
+            return data
+    
+    if request.method == 'GET':
+        session=Session(bind=engine)
+        operatorData = session.query(Operator).all()
+        operatorData = [e.serialize() for e in operatorData]
+        session.close()
+        return json.dumps(operatorData)
+
+@app.route('/leases', methods=['GET', 'POST'])
+def get_leases():
+    if request.method == 'GET':
+        session=Session(bind=engine)
+        leaseData = session.query(Lease).all()
+        leaseData = [e.serialize() for e in leaseData]
+        session.close()
+        return json.dumps(leaseData)
+
+    if request.method == 'POST':
+        session=Session(bind=engine)
+        data = ast.literal_eval(request.data.decode('utf-8'))
+        leaseData = session.query(Lease).all()
+        leaseData = [e.serialize() for e in leaseData]
+        individualLeases = [x for x in leaseData if x['operatorId'] == data['id']]
+        session.close()
+        if (len(individualLeases) > 0 ):
+            print("found in DB")
+            return json.dumps(individualLeases)
+        else: 
+            print("not in DB, searching the web for leases")
+            scrape_for_op_leases(data['id'])
+            return json.dumps([data])
+
+@app.route('/production', methods=['GET', 'POST'])
+def getProduction():
+    if request.method == 'GET':
+        session = Session(bind=engine)
+        productionData = session.query(Production).all()
+        productionData = [e.serialize() for e in productionData]
+        session.close()
+        return json.dumps(productionData)
+    if request.method == 'POST':
+        session=Session(bind=engine)
+        data = ast.literal_eval(request.data.decode('utf-8'))
+        productionData = session.query(Production).all()
+        productionData = [e.serialize() for e in productionData]
+        individualProductions = [x for x in productionData if x['leaseId'] == data['id']]
+        session.close()
+        if (len(individualProductions) > 0 ):
+            print("found in DB")
+            return json.dumps(individualProductions)
+        else: 
+            getFieldAndProduction(data['id'], data['district'], data['operator'])
+            return json.dumps([data])
+        
 @app.route('/values', methods=['GET', 'POST'])
 def get_or_post():
     session=Session(bind=engine)
     if request.method == 'GET':
-        #read data with pandas
-        # data = pd.read_sql("SELECT * FROM users", conn)
-        # return {"data": data.to_json(orient="records")}
         data = session.query(Surfer).all()
         data2 = session.query(Operator).all()
         data_list = []
-
-        #from type class list to json
-        # data_list2 = list(np.ravel(data))
         
         data_list2 = [e.serialize() for e in data]
 
@@ -66,9 +131,8 @@ def get_or_post():
                 "wipeouts": surfer.wipeouts
             }
             data_list.append(temp)
-        #read data with sqlalchemy
         session.close()
-        return {"data": data_list2}
+        return {"data": data_list}
         
     if request.method == 'POST':
         # decode from bytes object to dictionary

@@ -1,0 +1,12 @@
+.treeContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.lease {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 6px 12px 6px;
+    margin: 12px 6px 12px 6px;
+}
+

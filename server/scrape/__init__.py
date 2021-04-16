@@ -82,28 +82,28 @@ mock = {
 from controller import dbController
 
 def address_extraction_api(inputString):
-    # id = os.getenv('SS_AUTH-ID')
-    # token = os.getenv('SS_AUTH-TOKEN')
+    id = os.getenv('SS_AUTH-ID')
+    token = os.getenv('SS_AUTH-TOKEN')
     #print(f"id is {id} and token is {token}")
     #print(f"here are the environments: {os.environ}")
     
     #USE SMARTYSTREETS API TO PARSE ADDRESS AND GET LAT AND LONG
-    #url = f'https://us-extract.api.smartystreets.com?auth-id=7f6d7e2c-f659-a7dd-eb3d-fc3e772a3c80&auth-token=ge4NcF15QJYEKSLlcCTM'
-    # addressData = requests.post(url = url, data=inputString)
-    # addressData = addressData.json()
+    url = f'https://us-extract.api.smartystreets.com?auth-id=7f6d7e2c-f659-a7dd-eb3d-fc3e772a3c80&auth-token=ge4NcF15QJYEKSLlcCTM'
+    addressData = requests.post(url = url, data=inputString)
+    addressData = addressData.json()
     # FIXME when you want to use api instead of mock fix
-    addressData = mock
+    # addressData = mock
     street = addressData['addresses'][0]['api_output'][0]['delivery_line_1']
     city = addressData['addresses'][0]['api_output'][0]['components']['city_name']
     state = addressData['addresses'][0]['api_output'][0]['components']['state_abbreviation']
     zipcode = addressData['addresses'][0]['api_output'][0]['components']['zipcode']
     latitude = addressData['addresses'][0]['api_output'][0]['metadata']['latitude']
     longitude = addressData['addresses'][0]['api_output'][0]['metadata']['longitude']
-    #print(f"{street}, {city}, {state}, {zipcode}, {latitude}, {longitude}")
+    print(f"{street}, {city}, {state}, {zipcode}, {latitude}, {longitude}")
     return [ street, city, state, zipcode, latitude, longitude ]
     
 
-def scrape_op_info():
+def scrape_op_info(operatorId):
     options = webdriver.ChromeOptions()
     options.headless = True
     options.add_argument("window-size=1920x1080")
@@ -112,7 +112,7 @@ def scrape_op_info():
     # options.add_argument('--disable-dev-shm-usage') # Not used 
 
     driver = webdriver.Chrome(options=options)
-    operatorNumber = '521182'
+    operatorNumber = operatorId
     url = 'http://webapps2.rrc.texas.gov/EWA/organizationQueryAction.do'
 
     driver.get(url)
@@ -161,8 +161,8 @@ def scrape_op_info():
     dbController.addOperator(df)
     driver.quit()
 
-def scrape_for_op_leases():
-    operatorNumber = '521182'
+def scrape_for_op_leases(opId):
+    operatorNumber = opId
     options = webdriver.ChromeOptions()
     options.headless = True
     options.add_argument("window-size=1920x1080")
@@ -205,11 +205,13 @@ def scrape_for_op_leases():
     dataTable = soup.find("table", {"class": "DataGrid"})
     leases = []
     for row in dataTable.find_all("tr"):
-
+        
         rowList = row.text.strip().rstrip().replace(',','').splitlines()
+        
         rowList = [item for item in rowList if item.strip()]
         rowList = [item.lstrip() for item in rowList]
-
+        if rowList[0] == "Lease name" or rowList[0] == "Total":
+            continue
         newLease = {
             "operatorId": operatorNumber,
             "leaseId": rowList[1],
@@ -220,27 +222,35 @@ def scrape_for_op_leases():
             "gwGas": rowList[len(rowList)-2],
             "condensate": rowList[len(rowList)-1]
         }
-        x=1
-        if len(newLease['district']) == 2:
-            leases.append(newLease)
-            if x <= 1:
-                getFieldAndProduction(newLease, driver)
-                x = x +  1
+        time.sleep(.25)
+        dbController.addLease(newLease)
+        # x=1
+        # if len(newLease['district']) == 2:
+        #     leases.append(newLease)
+        #     if x <= 1:
+        #         getFieldAndProduction(newLease, driver)
+        #         x = x +  1
     driver.quit()
 
-def getFieldAndProduction(lease, driver):
-    #print(lease)
+def getFieldAndProduction(lease, districted, operatorId2):
+    
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    options.add_argument("window-size=1920x1080")
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-gpu')
+    driver = webdriver.Chrome(options=options)
     url = 'http://webapps.rrc.texas.gov/PDQ/quickLeaseReportBuilderAction.do'
 
     driver.get(url)
     #FIXME THIS WILL FAIL SOMETIMES BC ONLY CHECKING OIL LEASE RADIO BUTTON  NEED TO PUT A CONDITION IN HERE THAT 
     #CHECKS IF WE HAD DATA RETURNED OR FOR LEASE DOES NOT EXIST
     driver.find_element_by_xpath('//input[@value="Oil" and @type="radio" and @name="wellType"]').click()
-    driver.find_element_by_xpath('//input[@name="leaseNumber" and @type="text"]').send_keys(lease['leaseId'])
+    driver.find_element_by_xpath('//input[@name="leaseNumber" and @type="text"]').send_keys(lease)
 
     district = driver.find_element_by_xpath('//select[@name="district"]')
     districtDrop = Select(district)
-    districtDrop.select_by_visible_text(lease['district'])
+    districtDrop.select_by_visible_text(districted)
 
     startYear = driver.find_element_by_xpath('//select[@name="startYear"]')
     startYearDrop = Select(startYear)
@@ -281,7 +291,7 @@ def getFieldAndProduction(lease, driver):
         operatorProduction = operatorProduction[2:]
         operatorProduction.pop()
         productions = []
-        operatorId = lease['operatorId']
+        operatorId = operatorId2
         fieldId = ''
         
         try:
@@ -295,6 +305,7 @@ def getFieldAndProduction(lease, driver):
                 leaseProduction = {
                     # "leaseId": lease['leaseId'],
                     "operatorId": operatorId,
+                    "leaseId": lease,
                     "fieldId": fieldId,
                     "month": leaseProd[0].split()[0],
                     "year": leaseProd[0].split()[1],
@@ -303,9 +314,11 @@ def getFieldAndProduction(lease, driver):
                     "gasProd": leaseProd[3],
                     "gasDisp": leaseProd[4],
                 }
+                dbController.addProduction(leaseProduction)
                 productions.append(leaseProduction)
 
             productions = pd.DataFrame(productions)    
-            print("GRAND STANDING: ", productions.to_markdown())
+            print(productions.to_markdown())
         except:
-            print("you're in deep shit now")
+            print("something scraped very wrong")
+    driver.quit()

@@ -1,5 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, Date
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
+from sqlalchemy.orm import relationship
 #add base
 Base = declarative_base()
 import sys
@@ -58,3 +59,83 @@ class Operator(Base):
     lastP5 = Column(String(255))
     expirationDate = Column(String(255))
     renewalMonth = Column(String(255))
+    lease = relationship("Lease", back_populates="operator")
+    
+    def serialize(self):
+            return {
+                "operatorId" : self.operatorId,
+                "name" : self.name,
+                "status" : self.status,
+                "organizationType" : self.organizationType,
+                "filingFee" : self.filingFee,
+                "gathererCode" : self.gathererCode,
+                "specialtyCode" : self.specialtyCode,
+                "lStreet" : self.lStreet,
+                "lCity" : self.lCity,
+                "lState" : self.lState,
+                "lZip" : self.lZip,
+                "lLat" : self.lLat,
+                "lLong" : self.lLong,
+                "mStreet" : self.mStreet,
+                "mCity" : self.mCity,
+                "mState" : self.mState,
+                "mZip" : self.mZip,
+                "mLat" : self.mLat,
+                "mLong" : self.mLong,
+                "phone" : self.phone,
+                "ephone" : self.ephone,
+                "initialP5" : self.initialP5,
+                "lastP5" : self.lastP5,
+                "expirationDate" : self.expirationDate,
+                "renewalMonth" : self.renewalMonth
+            }
+
+class Lease(Base):
+    __tablename__ = 'leases'
+    leaseId = Column(String(10), primary_key=True)
+    operatorId = Column(String(10), ForeignKey('operators.operatorId'), unique=False)
+    name = Column(String(255))
+    district = Column(String(255))
+    oil = Column(String(255))
+    casingGas = Column(String(255))
+    gwGas = Column(String(255))
+    condensate = Column(String(255))
+    operator = relationship("Operator", back_populates="lease")
+    
+    def serialize(self):
+            return {
+                "operatorId" : self.operatorId,
+                "leaseId" : self.leaseId,
+                "name" : self.name,
+                "district" : self.district,
+                "oil" : self.oil,
+                "casingGas" : self.casingGas,
+                "gwGas" : self.gwGas,
+                "condensate": self.condensate,
+            }
+
+class Production(Base):
+    __tablename__ = 'productions'
+    id = Column(Integer, primary_key=True)
+    operatorId = Column(String(10))
+    leaseId = Column(String(10), unique=False)
+    fieldId = Column(String(50))
+    month = Column(String(255))
+    year = Column(String(255))
+    oilProd = Column(String(255))
+    oilDisp = Column(String(255))
+    gasProd = Column(String(255))
+    gasDisp = Column(String(255))
+    
+    def serialize(self):
+            return {
+                "operatorId" : self.operatorId,
+                "leaseId" : self.leaseId,
+                "fieldId" : self.fieldId,
+                "month" : self.month,
+                "year" : self.year,
+                "oilProd" : self.oilProd,
+                "oilDisp" : self.oilDisp,
+                "gasProd" : self.gasProd,
+                "gasDisp": self.gasDisp,
+            }

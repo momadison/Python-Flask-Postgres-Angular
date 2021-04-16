@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from schema import Operator
+from schema import Operator, Lease, Production
 #from project import db
 
 import os
@@ -47,21 +47,53 @@ class dbController:
             renewalMonth = operator['Renewal Month:'][0],
         )
         print(f"Here is the new operator: ", newOperator)
-        # #db.session.add(Operator(newOperator)
-        # #db.session.commit()
-        #operator_data = Operator(newOperator)
-        #print(f"new operator is: {operator_data}")
         
         session.add(newOperator)
         session.commit()
         session.close()
-        getLeases(newOperator['operatorId'])
-        return {"msg": "user added successfully"}
+        return {"msg": "operator added successfully"}
     
     @staticmethod
-    def addLease(operatorId):
+    def addLease(lease):
         session=Session(bind=engine)
-
-        session.close()
-        return "hello"
+        print("lease is : ", lease)
+        newLease = Lease(
+            leaseId = lease['leaseId'],
+            operatorId= lease['operatorId'], 
+            name = lease['name'],
+            district = lease['district'],
+            oil = lease['oil'],
+            casingGas = lease['casingGas'],
+            gwGas = lease['gwGas'],
+            condensate = lease['condensate'],
+        )
         
+        session.add(newLease)
+        session.commit()
+        # session.close()
+        session.close()
+        return {"msg": "lease added successfully"}
+        
+    @staticmethod
+    def addProduction(production):
+        session=Session(bind=engine)
+        print("Production is : ", production)
+        if (production['oilProd'] == 'NO RPT' or production['oilDisp'] == 'NO RPT' or \
+        production['gasProd'] == 'NO RPT' or production['gasDisp'] == 'NO RPT'):
+            return {"msg": "unreported data"}
+        newProduction = Production(
+            operatorId = production['operatorId'],
+            leaseId= production['leaseId'], 
+            fieldId = production['fieldId'],
+            month = production['month'],
+            year = production['year'],
+            oilProd = production['oilProd'],
+            oilDisp = production['oilDisp'],
+            gasProd = production['gasProd'],
+            gasDisp = production['gasDisp'],
+        )
+        
+        session.add(newProduction)
+        session.commit()
+        session.close()
+        return {"msg": "production added successfully"}

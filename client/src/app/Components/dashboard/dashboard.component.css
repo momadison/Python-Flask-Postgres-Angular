@@ -4,3 +4,15 @@ app-confetti {
     left: 0px;
     pointer-events: none;
 }
+app-animation-sandbox {
+    position: relative;
+    /* width: 100%; */
+    /* pointer-events: none; */
+}
+
+.animationSandbox {
+    width: 50%;
+    height: 400px;
+    margin-left: 100px;
+    background-color: lightslategray;
+}

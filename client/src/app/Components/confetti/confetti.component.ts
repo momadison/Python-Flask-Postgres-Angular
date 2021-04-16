@@ -14,7 +14,7 @@ export class ConfettiComponent implements AfterViewInit {
 
 	confettiSettings:{animationDuration: number, maxCount: number, speed: number, frameRate: number, alpha: number, gradient: boolean, maxConfettis: number} = {
 		animationDuration: 2000,
-		maxCount: 450,
+		maxCount: 500,		
 		speed: 5,
 		frameRate: 15,
 		alpha: .9,
@@ -144,7 +144,4 @@ export class ConfettiComponent implements AfterViewInit {
 			}
 		}
 	}
-
-
-
 }

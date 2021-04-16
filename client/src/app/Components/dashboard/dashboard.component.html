@@ -2,8 +2,8 @@
 <br><br>
 <app-viz-two></app-viz-two> -->
 <div class="container">
-    <div *ngIf="confetti">
-    <app-confetti></app-confetti>
+    <app-viz-one></app-viz-one>
+    <div *ngIf="confetti" #animationSandbox class="animationSandbox">
+    <app-animation-sandbox [tileDiv]="tileDiv"></app-animation-sandbox>
     </div>
-<app-viz-one></app-viz-one>
 </div>

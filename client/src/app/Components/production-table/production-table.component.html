@@ -1,0 +1,35 @@
+<div class="productionTableContainer">
+    <div *ngFor="let production of productionList" class="production">
+        <div class = "productionTable">
+            <div class = row>
+                <div class = column>
+                    {{production.operatorId}} 
+                </div>
+                <div class = column>
+                    {{production.leaseId}} 
+                </div>
+                <div class = column>
+                    {{production.fieldId}} 
+                </div>
+                <div class = column>
+                    {{production.month}} 
+                </div>
+                <div class = column>
+                    {{production.year}} 
+                </div>
+                <div class = column>
+                    {{production.oilProd}} 
+                </div>
+                <div class = column>
+                    {{production.oilDisp}} 
+                </div>
+                <div class = column>
+                    {{production.gasProd}} 
+                </div>
+                <div class = column>
+                    {{production.gasDisp}} 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
