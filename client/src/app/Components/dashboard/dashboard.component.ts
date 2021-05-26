@@ -10,16 +10,22 @@ export class DashboardComponent implements OnInit {
   anotherVariable;
   tileDiv;
   constructor() { }
-  confetti:boolean = false;
+
+  public confetti:boolean = false;
+
   ngOnInit(): void {
+
     setTimeout(() => {
       this.confetti = true;
       console.log("right after setting the confetti to true: ", this.animationSandbox)
     }, 500) 
+
     setTimeout(() => {
       console.log("animationSandbox just a little bit later: ", this.animationSandbox)
       this.tileDiv = this.animationSandbox.nativeElement.getBoundingClientRect();
     }, 1000)
+
+
   }
 
 

@@ -92,7 +92,8 @@ class Operator(Base):
 
 class Lease(Base):
     __tablename__ = 'leases'
-    leaseId = Column(String(10), primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    leaseId = Column(String(10))
     operatorId = Column(String(10), ForeignKey('operators.operatorId'), unique=False)
     name = Column(String(255))
     district = Column(String(255))
@@ -119,6 +120,32 @@ class Production(Base):
     id = Column(Integer, primary_key=True)
     operatorId = Column(String(10))
     leaseId = Column(String(10), unique=False)
+    fieldId = Column(String(50))
+    month = Column(String(255))
+    year = Column(String(255))
+    oilProd = Column(String(255))
+    oilDisp = Column(String(255))
+    gasProd = Column(String(255))
+    gasDisp = Column(String(255))
+    
+    def serialize(self):
+            return {
+                "operatorId" : self.operatorId,
+                "leaseId" : self.leaseId,
+                "fieldId" : self.fieldId,
+                "month" : self.month,
+                "year" : self.year,
+                "oilProd" : self.oilProd,
+                "oilDisp" : self.oilDisp,
+                "gasProd" : self.gasProd,
+                "gasDisp": self.gasDisp,
+            }
+
+class RegSchedule(Base):
+    __tablename__ = 'regulatory'
+    id = Column(Integer, primary_key=True)
+    operatorId = Column(String(10))
+    leaseId = Column(String(10))
     fieldId = Column(String(50))
     month = Column(String(255))
     year = Column(String(255))

@@ -1,0 +1,43 @@
+<div id="container">
+    <div id="navbar">
+        Well Reporter
+    </div>
+    <div id="content-container">
+        <div id = "leftnav" [style.height.px]="windowHeight" (window:resize)="onResize()">
+            <div *ngFor="let lease of leaseList; let i = index" class="leaseContainer" (click)="getWells(lease.leaseId, lease.district, lease.operatorId)">
+                {{ lease.name }} - {{ lease.leaseId }} <br> District {{ lease.district }} 
+                <br> Oil Production: {{ lease.oil }}
+            </div>
+        </div>
+        <div id="content-container-right">
+            <div *ngFor="let operator of operatorList" class = "right-top">
+                {{ operator.name }} - {{ operator.operatorId }}
+            </div>
+            <div id="content-container-bottom">
+                <div id="dateHeader">
+                    <div *ngIf = "leaseLive" class="dateForm">
+                        <mat-form-field class="productionDates" >
+                            <mat-label>Production Dates</mat-label>
+                            <mat-date-range-input
+                            [formGroup]="campaignOne"
+                            [rangePicker]="campaignOnePicker"
+                            [comparisonStart]="campaignTwo.value.start"
+                            [comparisonEnd]="campaignTwo.value.end"
+                            >
+                            <input matStartDate (dateChange)="getDates()" placeholder="Start date" formControlName="start">
+                            <input matEndDate (dateChange)="getDates()" placeholder="End date" formControlName="end">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>  
+                </div>
+                <div id="productionBlock-container">
+                    <div *ngFor="let production of productionList; let i = index" class="productionItem">
+                        {{ production.month }} - {{ production.year }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

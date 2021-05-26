@@ -14,22 +14,25 @@ export class OperatorTreeComponent implements OnInit {
   leaseList = [];
   leases;
   operatorId = '521182'
+  operatorModal:boolean = true;
   ngOnInit(): void {
-    this.getOperator(this.operatorId)
   }
 
-  getOperator(operatorId:string) {
+  getOperator(operatorId) {
+    this.operatorModal = false;
     axios.post('http://localhost:5000/operator', {id: operatorId})
     //prod environment
     // axios.post('/api/values', {email: "anotheremail@gmail.com"})
     .then((response) => {
+      console.log("replacing data")
       this.operatorList = response.data;
-      console.log(response.data)
+      this.getLeases(operatorId);
     })
   }
 
-  getLeases() {
-    axios.post('http://localhost:5000/leases', {id: this.operatorId})
+  getLeases(operatorId) {
+    console.log(`here is what i am passing ${operatorId} and here is ${this.operatorId}`)
+    axios.post('http://localhost:5000/leases', {id: operatorId})
     //prod environment
     // axios.post('/api/values', {email: "anotheremail@gmail.com"})
     .then((response) => {

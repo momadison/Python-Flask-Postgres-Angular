@@ -11,7 +11,7 @@ import ast
 import os
 import routes
 from schema import Surfer, Board, Base, Operator, Lease, Production
-from scrape import scrape_op_info, scrape_for_op_leases, getFieldAndProduction
+from scrape import scrape_op_info, scrape_for_op_leases, getFieldAndProduction, scrapeRegData
 
 # scrape_op_info()
 # Initialize Flask
@@ -112,6 +112,12 @@ def getProduction():
             getFieldAndProduction(data['id'], data['district'], data['operator'])
             return json.dumps([data])
         
+@app.route('/regulatory', methods=['GET', 'POST'])
+def getRegulatory():
+    birthMonth = 3
+    scrapeRegData(birthMonth);
+    return { "msg": "regulatory record added successfully"}
+
 @app.route('/values', methods=['GET', 'POST'])
 def get_or_post():
     session=Session(bind=engine)

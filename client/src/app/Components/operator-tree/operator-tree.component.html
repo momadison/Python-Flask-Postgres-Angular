@@ -1,9 +1,12 @@
 <div class="treeContainer">
+    <div *ngIf="operatorModal">
+        <app-operator-modal (getOperator)="getOperator($event)"></app-operator-modal>
+    </div>
    <div *ngFor="let operator of operatorList; let i = index"class="operator">
-       {{operator.name}} {{operator.operatorId}} <button (click)="getLeases()">get leases</button>
+       {{operator.name}} {{operator.operatorId}} {{operator.initialP5}} <button (click)="getLeases()">get leases</button>
    </div> 
    <div *ngFor="let lease of leaseList; let i = index"class="lease">
-       {{lease.name}} {{lease.district}} {{lease.oil}} <button (click)="getWells(lease.leaseId, lease.district, lease.operatorId)">get wells</button>
+       {{lease.name}} {{lease.leaseId}} {{lease.district}} {{lease.oil}} <button (click)="getWells(lease.leaseId, lease.district, lease.operatorId)">get wells</button>
    </div> 
    <div class="production">
        <app-production-table [productionList]="productionList"></app-production-table>

@@ -12,6 +12,12 @@ import { AnimationSandboxComponent } from './Components/animation-sandbox/animat
 import { OperatorTreeComponent } from './Components/operator-tree/operator-tree.component';
 import { ProductionTableComponent } from './Components/production-table/production-table.component';
 import { LineGraphComponent } from './Components/line-graph/line-graph.component';
+import { OperatorModalComponent } from './Components/operator-modal/operator-modal.component';
+import { DashboardWellreporterComponent } from './Components/dashboard-wellreporter/dashboard-wellreporter.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -24,13 +30,19 @@ import { LineGraphComponent } from './Components/line-graph/line-graph.component
     AnimationSandboxComponent,
     OperatorTreeComponent,
     ProductionTableComponent,
-    LineGraphComponent
+    LineGraphComponent,
+    OperatorModalComponent,
+    DashboardWellreporterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule, 
+    MatNativeDateModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

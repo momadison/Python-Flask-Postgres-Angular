@@ -3,13 +3,16 @@ import requests
 import json
 import os
 import pandas as pd
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 import ast
 import re
+from pprint import pprint
+import sys
+import urllib
 
 mock = {
     "meta": {
@@ -303,7 +306,6 @@ def getFieldAndProduction(lease, districted, operatorId2):
                     operatorId = leaseProd[len(leaseProd)-1]
                 
                 leaseProduction = {
-                    # "leaseId": lease['leaseId'],
                     "operatorId": operatorId,
                     "leaseId": lease,
                     "fieldId": fieldId,
@@ -322,3 +324,134 @@ def getFieldAndProduction(lease, districted, operatorId2):
         except:
             print("something scraped very wrong")
     driver.quit()
+
+def scrapeRegData(month):
+    try:
+        production = 'Oil'
+        district = "8A"
+        #fieldId = '58327200'
+        fieldId = '44313666'
+        #fieldId = '91818500'
+        options = webdriver.ChromeOptions()
+        options.headless = True
+        options.add_argument("window-size=1920x1080")
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Chrome(options=options)
+        url = 'https://rrc.texas.gov/oil-and-gas/research-and-statistics/proration-schedules/field/'
+        textUrl = 'https://portalvhdskzlfb8q9lqr9.blob.core.windows.net/media/56511/oilsch8a.txt' 
+        driver.get(url)
+        driver.find_elements_by_xpath("//a[contains(text(), 'March')]")[1].click()
+        time.sleep(1)
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, "html.parser")
+    
+        elem = soup.find_all("a", text=re.compile(r'.*' + production + ' District' + '*.'))
+        if (district == '1'):
+            textUrl = elem[0]['href']
+        elif (district == '2'):
+            textUrl = elem[1]['href']
+        elif (district == '3'):
+            textUrl = elem[2]['href']
+        elif (district == '4'):
+            textUrl = elem[3]['href']
+        elif (district == '5'):
+            textUrl = elem[4]['href']
+        elif (district == '6'):
+            textUrl = elem[5]['href']
+        elif (district == '6E'):
+            textUrl = elem[6]['href']
+        elif (district == '7B'):
+            if (production == 'Oil'):
+                textUrl = elem[7]['href']
+            elif (production == 'Gas'):
+                textUrl = elem[6]['href']
+        elif (district == '7C'):
+            if (production == 'Oil'):
+                textUrl = elem[8]['href']
+            elif (production == 'Gas'):
+                textUrl = elem[7]['href']
+        elif (district == '8'):
+            if (production == 'Oil'):
+                textUrl = elem[9]['href']
+            elif (production == 'Gas'):
+                textUrl = elem[8]['href']
+        elif (district == '8A'):
+            if (production == 'Oil'):
+                textUrl = elem[10]['href']
+            elif (production == 'Gas'):
+                textUrl = elem[9]['href']
+        elif (district == '9'):
+            if (production == 'Oil'):
+                textUrl = elem[11]['href']
+            elif (production == 'Gas'):
+                textUrl = elem[10]['href']
+        elif (district == '10'):
+            if (production == 'Oil'):
+                textUrl = elem[12]['href']
+            elif (production == 'Gas'):
+                textUrl = elem[11]['href']
+        print("here is your url: ", textUrl)
+        textFileList = []
+        file = urllib.request.urlopen(str(textUrl))
+        for line in file:
+            decode = line.decode('ISO-8859-1')
+            textFileList.append(decode)
+        
+        textFileList = [line.strip() for line in textFileList]
+        fieldRules = []
+        foundField = False;
+        gasCounter = 1;
+        if (production == 'Gas'):
+            gasCounter = 0;
+            fieldId = 'NEWARK, EAST (BARNETT SHALE)'
+        for index, line in enumerate(textFileList):
+            if fieldId in line and foundField == False:
+                if gasCounter == 1:
+                    print('found it', line)
+                    print('index: ', index)
+                    print('len fo file: ', len(textFileList))
+                    foundField = True
+                    for i in range(index, len(textFileList)):
+                        if (production == 'Gas'):
+                            if ( 'IDENT' in textFileList[i] ):
+                                print('ident in the house yo')
+                                break
+                            else:
+                                fieldRules.append(textFileList[i])
+                        elif ( 'MVBAL' in textFileList[i] ):
+                            break
+                        else:
+                            fieldRules.append(textFileList[i])
+                else:
+                    gasCounter += 1
+
+        fieldRules = [' '.join(rule.split()) for rule in fieldRules]
+        fieldRules = [rule.replace('*', '').strip() for rule in fieldRules]
+        print(len(fieldRules))
+        print(fieldRules)
+        # driver.quit()
+        # depth = fieldRules[0].split(':')[1]
+        # cumulativeProduction = fieldRules[1].split('- ')[1]
+        # attributeSubset = fieldRules[2].split(' ,')
+        # discovered = attributeSubset[0].split(':')[1]
+        # gravity = attributeSubset[1].split(':')[1]
+        # ratio = attributeSubset[2].split(':')[1]
+        # allow = attributeSubset[3].split(':')[1]
+        # spacing = attributeSubset[4].split(':')[1]
+        # field = {
+        #     'depth': str(depth).strip(),
+        #     'cumulativeProduction': int(cumulativeProduction),
+        #     'discovered': str(discovered),
+        #     'gravity': gravity,
+        #     'ratio': ratio.strip(),
+        #     'allow': allow.strip(),
+        #     'spacing': spacing.strip()
+        # }
+        # print('field: ', field)
+    except:
+        print("Unexpected error:", sys.exc_info())
+    
+

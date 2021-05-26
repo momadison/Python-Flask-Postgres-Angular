@@ -1,9 +1,11 @@
+import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from schema import Operator, Lease, Production
 #from project import db
 
 import os
+import pandas as pd
 
 engine=create_engine('postgresql://hello_flask:hello_flask@db:5432/hello_flask_dev')
 conn=engine.connect()
@@ -77,7 +79,9 @@ class dbController:
     @staticmethod
     def addProduction(production):
         session=Session(bind=engine)
-        print("Production is : ", production)
+        # myString = str(production['year']) + str(production['month'])
+        # myDate = datetime.strptime(myString, format='%Y%B')
+        # print("my date: ", myDate)
         if (production['oilProd'] == 'NO RPT' or production['oilDisp'] == 'NO RPT' or \
         production['gasProd'] == 'NO RPT' or production['gasDisp'] == 'NO RPT'):
             return {"msg": "unreported data"}
@@ -93,7 +97,20 @@ class dbController:
             gasDisp = production['gasDisp'],
         )
         
-        session.add(newProduction)
-        session.commit()
-        session.close()
-        return {"msg": "production added successfully"}
+        
+        
+        alreadyExists = session.query(Production).filter(
+                Production.operatorId == newProduction.operatorId  and \
+                Production.leaseId == newProduction.leaseId and \
+                Production.month == newProduction.month and \
+                Production.year == newProduction.year
+            ) or ""
+        if (alreadyExists != ""):
+            session.add(newProduction)
+            session.commit()
+            session.close()
+            print("success")
+            return {"msg": "production added successfully"}
+        else:
+            print("already exists")
+            return {"msg": "record already exists"}
