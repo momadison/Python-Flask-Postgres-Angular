@@ -6,6 +6,7 @@ import { AnimationSandboxComponent } from './Components/animation-sandbox/animat
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { OperatorTreeComponent } from './Components/operator-tree/operator-tree.component';
 import { DashboardWellreporterComponent } from './Components/dashboard-wellreporter/dashboard-wellreporter.component';
+import { LandingComponent } from './Components/landing/landing.component';
 
 const routes: Routes = [
   { path: '' , component: DashboardComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'viz2', component: VizTwoComponent},
   { path: 'sandbox', component: AnimationSandboxComponent},
   { path: 'tree', component: OperatorTreeComponent},
-  { path: 'dashboard', component: DashboardWellreporterComponent}
+  { path: 'dashboard', component: DashboardWellreporterComponent},
+  { path: 'landing', component: LandingComponent}
 ];
 
 @NgModule({

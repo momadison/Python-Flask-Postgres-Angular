@@ -33,8 +33,11 @@
                     </div>  
                 </div>
                 <div id="productionBlock-container">
-                    <div *ngFor="let production of productionList; let i = index" class="productionItem">
-                        {{ production.month }} - {{ production.year }}
+                    <div *ngFor="let production of productionShownList; let i = index" class="productionItem">
+                        <div class="operator">Operator ID: {{production.operatorId}}<br></div>
+                        <div class="productionDate">{{ production.month }}-{{ production.year }}</div>
+                        <div class="producitonInfo productionItemLast">Gas Sales: {{production.gasDisp}}mcf <br>Gas Production: {{production.gasProd}}mcf </div>
+                        <div class="producitonInfo productionItemLast">Oil Sales: {{production.oilDisp}}bo <br>Oil Production: {{production.oilProd}}bo </div>
                     </div>
                 </div>
             </div>

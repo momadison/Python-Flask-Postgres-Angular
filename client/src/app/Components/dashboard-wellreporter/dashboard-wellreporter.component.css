@@ -29,9 +29,14 @@
     align-items:center;
     width: 150px;
     background-color: darkgrey;
-    overflow: auto;
+    overflow: scroll;
     padding: 3px 2px;
     height: 300px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
 }
 
 #content-container-right {
@@ -106,5 +111,13 @@
     margin-top: 2px;
     padding: 8px;
     font-size: 10px;
+    display: flex;
 }
 
+.productionItem div {
+    margin-right: 10px;
+}
+
+.productionItemLast {
+    margin-left: auto;
+}

@@ -18,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LandingComponent } from './Components/landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     ProductionTableComponent,
     LineGraphComponent,
     OperatorModalComponent,
-    DashboardWellreporterComponent
+    DashboardWellreporterComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,
